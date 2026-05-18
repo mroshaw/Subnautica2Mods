@@ -1,5 +1,4 @@
 local UEHelpers = require("UEHelpers")
-
 local MOD_NAME = "BeginnersGuideCheatMod"
 
 -- Simple helper function to log messages with the mod name as a prefix and a timestamp
@@ -24,14 +23,21 @@ local function findPlayerAttrSet()
     return nil
 end
 
+-- When the player spawns, find and set the survival attribute
+NotifyOnNewObject("/Game/Blueprints/Character/player/BP_Character_01.BP_Character_01_C", function()
+    ExecuteInGameThread(function()
+        attrSet = nil
+        attrSet = findPlayerAttrSet()
+        if attrSet then
+            log("Player character created - survival attributes found! Infinite Oxygen, Food, and Water enabled!")
+        end
+    end)
+end)
+
 -- Loop every 500ms to check for the player's attribute set and modify it to give infinite oxygen, food, and water
 LoopAsync(500, function()
     ExecuteInGameThread(function()
         if not attrSet or not attrSet:IsValid() then
-            attrSet = findPlayerAttrSet()
-            if attrSet then
-                log("Player survival attributes found, infinite oxygen/food/water active!")
-            end
             return
         end
 
@@ -50,7 +56,7 @@ LoopAsync(500, function()
         attrSet.Water.BaseValue = maxWater
         attrSet.Water.CurrentValue = maxWater
     end)
-    return true
+    return false
 end)
 
 log("Loaded!")
