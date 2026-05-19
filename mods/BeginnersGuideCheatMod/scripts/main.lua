@@ -4,6 +4,9 @@ local UEHelpers = require("UEHelpers")
 ---@type string
 local MOD_NAME = "BeginnersGuideCheatMod"
 
+---@type boolean
+local debugMode = true
+
 -- Simple helper function to log messages with the mod name as a prefix
 ---@param msg string
 local function log(msg)
@@ -43,6 +46,12 @@ end)
 LoopAsync(500, function()
     ExecuteInGameThread(function()
         if not attrSet or not attrSet:IsValid() then
+            -- If we're in debug mode, don't wait for the player to respawn. This allows us to hot reload the mod
+            -- by setting debugMode to true
+            if(debugMode) then
+                log("Survival attribute set not found or invalid. Attempting to find it again...")
+                attrSet = findPlayerAttrSet()
+            end
             return
         end
 
