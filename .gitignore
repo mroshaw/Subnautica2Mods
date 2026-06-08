@@ -76,3 +76,8 @@ Plugins/**/Intermediate/*
 
 # UE Mod development files
 */shared/
+
+# Visual Studio mod dev files
+**/Output/**
+*/CXXHeaderDump/*
+Subnautica2-Project-main/
